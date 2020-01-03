@@ -1,0 +1,13 @@
+C:\Users\ahrik\Desktop\Template\bin\Debug\Template.exe.config
+C:\Users\ahrik\Desktop\Template\bin\Debug\Template.exe
+C:\Users\ahrik\Desktop\Template\bin\Debug\Template.pdb
+C:\Users\ahrik\Desktop\Template\obj\Debug\Template.csprojAssemblyReference.cache
+C:\Users\ahrik\Desktop\Template\obj\Debug\Template.Main.resources
+C:\Users\ahrik\Desktop\Template\obj\Debug\Template.Properties.Resources.resources
+C:\Users\ahrik\Desktop\Template\obj\Debug\Template.csproj.GenerateResource.cache
+C:\Users\ahrik\Desktop\Template\obj\Debug\Template.exe
+C:\Users\ahrik\Desktop\Template\obj\Debug\Template.pdb
+C:\Users\ahrik\Desktop\Template\bin\Debug\Newtonsoft.Json.dll
+C:\Users\ahrik\Desktop\Template\bin\Debug\Newtonsoft.Json.xml
+C:\Users\ahrik\Desktop\Template\obj\Debug\Template.csproj.CopyComplete
+C:\Users\ahrik\Desktop\Template\obj\Debug\Template.Config.resources
