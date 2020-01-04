@@ -18,27 +18,40 @@ namespace Template
             InitializeComponent();
             if (File.Exists(configPath))
             {
-                string[] lines = File.ReadAllLines(configPath);
-                config = JsonConvert.DeserializeObject<Dictionary<string, string>>(string.Join("\n", lines));
-                this.Text = config["title"];
-                if (config.ContainsKey("input") && !config["input"].Equals(""))
-                    this.txtInput.Text = config["input"];
-                else
-                    this.txtInput.Text = Directory.GetCurrentDirectory() + "\\input";
-                if (config.ContainsKey("output") && !config["output"].Equals(""))
-                    this.txtOutput.Text = config["output"];
-                else
-                    this.txtOutput.Text = Directory.GetCurrentDirectory() + "\\output";
-                if (config.ContainsKey("error") && !config["error"].Equals(""))
+                try
                 {
-                    if (Directory.Exists(Path.GetDirectoryName(config["error"])))
+                    string[] lines = File.ReadAllLines(configPath);
+                    for (int i = 0; i < lines.Length - 1; i++)
                     {
-                        this.errorLogPath = config["error"];
+                        lines[i] = lines[i].Replace("\\", "\\\\");
                     }
+                    config = JsonConvert.DeserializeObject<Dictionary<string, string>>(string.Join("\n", lines));
+                    this.Text = config["title"];
+                    if (config.ContainsKey("input") && !config["input"].Equals(""))
+                        this.txtInput.Text = config["input"];
                     else
+                        this.txtInput.Text = Directory.GetCurrentDirectory() + "\\input";
+                    if (config.ContainsKey("output") && !config["output"].Equals(""))
+                        this.txtOutput.Text = config["output"];
+                    else
+                        this.txtOutput.Text = Directory.GetCurrentDirectory() + "\\output";
+                    if (config.ContainsKey("error") && !config["error"].Equals(""))
                     {
-                        MessageBox.Show("配置文件中错误日志的路径不存在，已设置为：\n" + errorLogPath, "错误：", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        if (Directory.Exists(Path.GetDirectoryName(config["error"])))
+                        {
+                            this.errorLogPath = config["error"];
+                        }
+                        else
+                        {
+                            MessageBox.Show("配置文件中错误日志的路径不存在，已设置为：\n" + errorLogPath, "错误：", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("配置文件错误，请矫正", "错误：", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    this.txtInput.Text = Directory.GetCurrentDirectory() + "\\input";
+                    this.txtOutput.Text = Directory.GetCurrentDirectory() + "\\output";
                 }
             }
             else
@@ -124,6 +137,8 @@ namespace Template
             {
                 this.lbStatus.Text = "任务进行中... (" + info.process.ToString() + "%)";
                 this.progressBar.Value = info.process;
+                this.lbSuccessLinesCount.Text = "已成功处理行数：" + info.success_count_lines.ToString();
+                this.lbErrorLinesCount.Text = "已失败处理行数：" + info.error_count_lines.ToString();
             }
         }
 
@@ -172,6 +187,21 @@ namespace Template
         {
             Config config = new Config();
             config.Show();
+        }
+
+        private void txtInput_TextChanged(object sender, EventArgs e)
+        {
+            if (Directory.Exists(this.txtInput.Text))
+            {
+                DirectoryInfo TheFolder = new DirectoryInfo(this.txtInput.Text);
+                this.lbCount.Text = "待处理文件数： " + TheFolder.GetFiles().Length;
+                this.lbCount.ForeColor = System.Drawing.Color.DeepSkyBlue;
+            }
+            else
+            {
+                this.lbCount.Text = "输入路径不存在";
+                this.lbCount.ForeColor = System.Drawing.Color.Red;
+            }
         }
     }
 }

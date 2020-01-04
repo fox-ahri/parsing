@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 using Newtonsoft.Json;
 
 namespace Template
@@ -15,6 +16,7 @@ namespace Template
     public partial class Config : Form
     {
         string path = Directory.GetCurrentDirectory() + "\\config.json";
+        Dictionary<string, string> config;
         public Config()
         {
             InitializeComponent();
@@ -40,8 +42,13 @@ namespace Template
         {
             try
             {
-                Dictionary<string, string> config = JsonConvert.DeserializeObject<Dictionary<string, string>>(this.rtxtConfig.Text);
-                System.IO.File.WriteAllText(path, this.rtxtConfig.Text);
+                string tmp = "{\n";
+                foreach (KeyValuePair<string, string> kvp in config)
+                {
+                    tmp += "\t\"" + kvp.Key + "\": \"" + kvp.Value + "\",\n";
+                }
+                tmp += "}";
+                File.WriteAllText(path, tmp);
                 SetStatus(2);
             }
             catch (Exception ex)
@@ -59,15 +66,20 @@ namespace Template
             {
                 File.WriteAllText(path, "{\n    \"title\": \"Title\"\n}");
             }
-            string[] lines = File.ReadAllLines(path);
-            this.rtxtConfig.Text = string.Join("\n", lines);
+            string[] lines = File.ReadAllLines(path, Encoding.UTF8);
+            for (int i=0;i<lines.Length - 1; i++)
+            {
+                lines[i] = lines[i].Replace("\\", "\\\\");
+            }
             try
             {
-                Dictionary<string, string> config = JsonConvert.DeserializeObject<Dictionary<string, string>>(this.rtxtConfig.Text);
+                config = JsonConvert.DeserializeObject<Dictionary<string, string>>(string.Join("\n", lines));
                 this.txtTitle.Text = config.ContainsKey("title") ? config["title"] : "";
                 this.txtInput.Text = config.ContainsKey("input") ? config["input"] : "";
                 this.txtOutput.Text = config.ContainsKey("output") ? config["output"] : "";
                 this.txtErrorlog.Text = config.ContainsKey("error") ? config["error"] : "";
+
+                //SetJson("title", this.txtTitle.Text);
             }
             catch (Exception ex)
             {
@@ -111,10 +123,18 @@ namespace Template
             SetStatus(1);
             try
             {
-                Dictionary<string, string> config = JsonConvert.DeserializeObject<Dictionary<string, string>>(this.rtxtConfig.Text);
-                this.txtTitle.Text = config["title"];
+                config = JsonConvert.DeserializeObject<Dictionary<string, string>>(this.rtxtConfig.Text.Replace("\\", "\\\\"));
+                SetUI();
             }
             catch (Exception ex) { }
+        }
+
+        void SetUI()
+        {
+            this.txtTitle.Text = config.ContainsKey("title") ? config["title"] : "";
+            this.txtInput.Text = config.ContainsKey("input") ? config["input"] : "";
+            this.txtOutput.Text = config.ContainsKey("output") ? config["output"] : "";
+            this.txtErrorlog.Text = config.ContainsKey("error") ? config["error"] : "";
         }
         #endregion
 
@@ -122,6 +142,44 @@ namespace Template
         private void txtTitle_TextChanged(object sender, EventArgs e)
         {
             SetStatus(1);
+            SetJson("title", this.txtTitle.Text);
+        }
+
+        private void txtInput_TextChanged(object sender, EventArgs e)
+        {
+            SetStatus(1);
+            SetJson("input", this.txtInput.Text);
+        }
+
+        private void txtOutput_TextChanged(object sender, EventArgs e)
+        {
+            SetStatus(1);
+            SetJson("output", this.txtOutput.Text);
+        }
+
+        private void txtErrorlog_TextChanged(object sender, EventArgs e)
+        {
+            SetStatus(1);
+            SetJson("error", this.txtErrorlog.Text);
+        }
+
+        void SetJson(string k, string v)
+        {
+            if (config.ContainsKey(k))
+            {
+                config[k] = v;
+            }
+            else
+            {
+                config.Add(k, v);
+            }
+            string tmp = "{\n";
+            foreach (KeyValuePair<string, string> kvp in config)
+            {
+                tmp += "\t\"" + kvp.Key + "\": \"" + kvp.Value + "\",\n";
+            }
+            tmp += "}";
+            this.rtxtConfig.Text = tmp;
         }
         #endregion
     }

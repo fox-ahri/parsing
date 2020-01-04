@@ -1,6 +1,6 @@
 {
-    "title": "Ti123tle",
-    "input": "C:\\Users\\ahrik\\Desktop\\Template\\bin\\Debug",
-    "output": "",
-    "error": ""
+	"title": "Title",
+	"input": "C:\Users\ahrik\Desktop\bak",
+	"output": "C:\Users\ahrik\Desktop\bak\output",
+	"error": "C:\Users\ahrik\Desktop\bak\output",
 }

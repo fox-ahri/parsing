@@ -176,6 +176,7 @@
             this.txtInput.Name = "txtInput";
             this.txtInput.Size = new System.Drawing.Size(514, 23);
             this.txtInput.TabIndex = 9;
+            this.txtInput.TextChanged += new System.EventHandler(this.txtInput_TextChanged);
             // 
             // lbInput
             // 
@@ -194,6 +195,7 @@
             this.txtOutput.Name = "txtOutput";
             this.txtOutput.Size = new System.Drawing.Size(514, 23);
             this.txtOutput.TabIndex = 11;
+            this.txtOutput.TextChanged += new System.EventHandler(this.txtOutput_TextChanged);
             // 
             // lbOutput
             // 
@@ -212,6 +214,7 @@
             this.txtErrorlog.Name = "txtErrorlog";
             this.txtErrorlog.Size = new System.Drawing.Size(514, 23);
             this.txtErrorlog.TabIndex = 13;
+            this.txtErrorlog.TextChanged += new System.EventHandler(this.txtErrorlog_TextChanged);
             // 
             // lbErrorlog
             // 

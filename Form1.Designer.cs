@@ -44,6 +44,9 @@
             this.menuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuConfig = new System.Windows.Forms.ToolStripMenuItem();
+            this.lbCount = new System.Windows.Forms.Label();
+            this.lbSuccessLinesCount = new System.Windows.Forms.Label();
+            this.lbErrorLinesCount = new System.Windows.Forms.Label();
             this.menu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -54,6 +57,7 @@
             this.txtInput.Name = "txtInput";
             this.txtInput.Size = new System.Drawing.Size(648, 26);
             this.txtInput.TabIndex = 0;
+            this.txtInput.TextChanged += new System.EventHandler(this.txtInput_TextChanged);
             // 
             // btnInput
             // 
@@ -69,7 +73,7 @@
             // btnOutput
             // 
             this.btnOutput.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnOutput.Location = new System.Drawing.Point(666, 143);
+            this.btnOutput.Location = new System.Drawing.Point(666, 152);
             this.btnOutput.Name = "btnOutput";
             this.btnOutput.Size = new System.Drawing.Size(122, 28);
             this.btnOutput.TabIndex = 3;
@@ -80,7 +84,7 @@
             // txtOutput
             // 
             this.txtOutput.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.txtOutput.Location = new System.Drawing.Point(12, 145);
+            this.txtOutput.Location = new System.Drawing.Point(12, 154);
             this.txtOutput.Name = "txtOutput";
             this.txtOutput.Size = new System.Drawing.Size(648, 26);
             this.txtOutput.TabIndex = 2;
@@ -184,15 +188,51 @@
             // 
             this.menuConfig.Name = "menuConfig";
             this.menuConfig.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-            this.menuConfig.Size = new System.Drawing.Size(180, 22);
+            this.menuConfig.Size = new System.Drawing.Size(168, 22);
             this.menuConfig.Text = "配置文件";
             this.menuConfig.Click += new System.EventHandler(this.menuConfig_Click);
+            // 
+            // lbCount
+            // 
+            this.lbCount.AutoSize = true;
+            this.lbCount.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbCount.ForeColor = System.Drawing.Color.Red;
+            this.lbCount.Location = new System.Drawing.Point(12, 118);
+            this.lbCount.Name = "lbCount";
+            this.lbCount.Size = new System.Drawing.Size(127, 16);
+            this.lbCount.TabIndex = 9;
+            this.lbCount.Text = "输入路径不存在";
+            // 
+            // lbSuccessLinesCount
+            // 
+            this.lbSuccessLinesCount.AutoSize = true;
+            this.lbSuccessLinesCount.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbSuccessLinesCount.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.lbSuccessLinesCount.Location = new System.Drawing.Point(12, 374);
+            this.lbSuccessLinesCount.Name = "lbSuccessLinesCount";
+            this.lbSuccessLinesCount.Size = new System.Drawing.Size(135, 14);
+            this.lbSuccessLinesCount.TabIndex = 10;
+            this.lbSuccessLinesCount.Text = "已成功处理行数：0";
+            // 
+            // lbErrorLinesCount
+            // 
+            this.lbErrorLinesCount.AutoSize = true;
+            this.lbErrorLinesCount.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbErrorLinesCount.ForeColor = System.Drawing.Color.Red;
+            this.lbErrorLinesCount.Location = new System.Drawing.Point(12, 400);
+            this.lbErrorLinesCount.Name = "lbErrorLinesCount";
+            this.lbErrorLinesCount.Size = new System.Drawing.Size(135, 14);
+            this.lbErrorLinesCount.TabIndex = 11;
+            this.lbErrorLinesCount.Text = "已失败处理行数：0";
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.lbErrorLinesCount);
+            this.Controls.Add(this.lbSuccessLinesCount);
+            this.Controls.Add(this.lbCount);
             this.Controls.Add(this.btnStop);
             this.Controls.Add(this.lbStatus);
             this.Controls.Add(this.progressBar);
@@ -231,6 +271,9 @@
         private System.Windows.Forms.ToolStripMenuItem menuExit;
         private System.Windows.Forms.ToolStripMenuItem 设置ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem menuConfig;
+        private System.Windows.Forms.Label lbCount;
+        private System.Windows.Forms.Label lbSuccessLinesCount;
+        private System.Windows.Forms.Label lbErrorLinesCount;
     }
 }
 

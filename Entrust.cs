@@ -16,5 +16,7 @@
     {
         public string name;
         public int process;
+        public double success_count_lines;
+        public double error_count_lines;
     };
 }
