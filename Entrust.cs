@@ -10,6 +10,9 @@
         public string input;
         public string output;
         public string error;
+        public string template;
+        public bool fragmentation;
+        public string ruleFrag;
     };
 
     struct WindowInfo

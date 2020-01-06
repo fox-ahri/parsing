@@ -1,6 +1,7 @@
 {
 	"title": "Title",
-	"input": "C:\Users\ahrik\Desktop\bak",
-	"output": "C:\Users\ahrik\Desktop\bak\output",
-	"error": "C:\Users\ahrik\Desktop\bak\output",
+	"input": "C:\\Users\\ahrik\\Desktop\\bak",
+	"output": "C:\\Users\\ahrik\\Desktop\\bak\\output",
+	"error": "C:\\Users\\ahrik\\Desktop\\bak\\output\\error_log.txt",
+	"template": "C:\\Users\\ahrik\\Desktop\\bak\\output\\template.txt",
 }

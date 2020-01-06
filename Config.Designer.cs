@@ -48,6 +48,8 @@
             this.lbOutput = new System.Windows.Forms.Label();
             this.txtErrorlog = new System.Windows.Forms.TextBox();
             this.lbErrorlog = new System.Windows.Forms.Label();
+            this.txtTemplate = new System.Windows.Forms.TextBox();
+            this.lbTemplate = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -86,6 +88,7 @@
             // btnReset
             // 
             this.btnReset.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnReset.ForeColor = System.Drawing.Color.Red;
             this.btnReset.Location = new System.Drawing.Point(1113, 21);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(106, 36);
@@ -226,11 +229,32 @@
             this.lbErrorlog.TabIndex = 12;
             this.lbErrorlog.Text = "错误日志";
             // 
+            // txtTemplate
+            // 
+            this.txtTemplate.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txtTemplate.Location = new System.Drawing.Point(87, 193);
+            this.txtTemplate.Name = "txtTemplate";
+            this.txtTemplate.Size = new System.Drawing.Size(514, 23);
+            this.txtTemplate.TabIndex = 15;
+            this.txtTemplate.TextChanged += new System.EventHandler(this.txtTemplate_TextChanged);
+            // 
+            // lbTemplate
+            // 
+            this.lbTemplate.AutoSize = true;
+            this.lbTemplate.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbTemplate.Location = new System.Drawing.Point(44, 196);
+            this.lbTemplate.Name = "lbTemplate";
+            this.lbTemplate.Size = new System.Drawing.Size(37, 14);
+            this.lbTemplate.TabIndex = 14;
+            this.lbTemplate.Text = "模板";
+            // 
             // Config
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1455, 644);
+            this.Controls.Add(this.txtTemplate);
+            this.Controls.Add(this.lbTemplate);
             this.Controls.Add(this.txtErrorlog);
             this.Controls.Add(this.lbErrorlog);
             this.Controls.Add(this.txtOutput);
@@ -278,5 +302,7 @@
         private System.Windows.Forms.Label lbOutput;
         private System.Windows.Forms.TextBox txtErrorlog;
         private System.Windows.Forms.Label lbErrorlog;
+        private System.Windows.Forms.TextBox txtTemplate;
+        private System.Windows.Forms.Label lbTemplate;
     }
 }

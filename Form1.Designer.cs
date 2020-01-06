@@ -47,6 +47,8 @@
             this.lbCount = new System.Windows.Forms.Label();
             this.lbSuccessLinesCount = new System.Windows.Forms.Label();
             this.lbErrorLinesCount = new System.Windows.Forms.Label();
+            this.ckFragmentation = new System.Windows.Forms.CheckBox();
+            this.txtRuleFrge = new System.Windows.Forms.TextBox();
             this.menu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -225,11 +227,35 @@
             this.lbErrorLinesCount.TabIndex = 11;
             this.lbErrorLinesCount.Text = "已失败处理行数：0";
             // 
+            // ckFragmentation
+            // 
+            this.ckFragmentation.AutoSize = true;
+            this.ckFragmentation.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ckFragmentation.Location = new System.Drawing.Point(12, 218);
+            this.ckFragmentation.Name = "ckFragmentation";
+            this.ckFragmentation.Size = new System.Drawing.Size(59, 20);
+            this.ckFragmentation.TabIndex = 12;
+            this.ckFragmentation.Text = "分包";
+            this.ckFragmentation.UseVisualStyleBackColor = true;
+            this.ckFragmentation.CheckedChanged += new System.EventHandler(this.ckFragmentation_CheckedChanged);
+            // 
+            // txtRuleFrge
+            // 
+            this.txtRuleFrge.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txtRuleFrge.Location = new System.Drawing.Point(76, 216);
+            this.txtRuleFrge.Name = "txtRuleFrge";
+            this.txtRuleFrge.Size = new System.Drawing.Size(584, 26);
+            this.txtRuleFrge.TabIndex = 13;
+            this.txtRuleFrge.Text = "${R_1_N}";
+            this.txtRuleFrge.Visible = false;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.txtRuleFrge);
+            this.Controls.Add(this.ckFragmentation);
             this.Controls.Add(this.lbErrorLinesCount);
             this.Controls.Add(this.lbSuccessLinesCount);
             this.Controls.Add(this.lbCount);
@@ -274,6 +300,8 @@
         private System.Windows.Forms.Label lbCount;
         private System.Windows.Forms.Label lbSuccessLinesCount;
         private System.Windows.Forms.Label lbErrorLinesCount;
+        private System.Windows.Forms.CheckBox ckFragmentation;
+        private System.Windows.Forms.TextBox txtRuleFrge;
     }
 }
 

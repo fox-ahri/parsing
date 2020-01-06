@@ -21,10 +21,6 @@ namespace Template
                 try
                 {
                     string[] lines = File.ReadAllLines(configPath);
-                    for (int i = 0; i < lines.Length - 1; i++)
-                    {
-                        lines[i] = lines[i].Replace("\\", "\\\\");
-                    }
                     config = JsonConvert.DeserializeObject<Dictionary<string, string>>(string.Join("\n", lines));
                     this.Text = config["title"];
                     if (config.ContainsKey("input") && !config["input"].Equals(""))
@@ -99,6 +95,9 @@ namespace Template
                 p.input = this.txtInput.Text;
                 p.output = this.txtOutput.Text;
                 p.error = config["error"];
+                p.template = config["template"];
+                p.fragmentation = this.ckFragmentation.Checked;
+                p.ruleFrag = this.txtRuleFrge.Text;
                 myThread = new Thread(() => HT.StartTask(p));
                 myThread.IsBackground = true;
                 myThread.Start();
@@ -125,6 +124,8 @@ namespace Template
             this.btnInput.Enabled = false;
             this.btnOutput.Enabled = false;
             this.lbStatus.Text = "准备开始";
+            this.ckFragmentation.Enabled = false;
+            this.txtRuleFrge.Enabled = false;
         }
 
         void StartOfTask(WindowInfo info)
@@ -166,6 +167,8 @@ namespace Template
             this.txtOutput.Enabled = true;
             this.btnInput.Enabled = true;
             this.btnOutput.Enabled = true;
+            this.ckFragmentation.Enabled = true;
+            this.txtRuleFrge.Enabled = true;
         }
 
         private void menuInput_Click(object sender, EventArgs e)
@@ -202,6 +205,11 @@ namespace Template
                 this.lbCount.Text = "输入路径不存在";
                 this.lbCount.ForeColor = System.Drawing.Color.Red;
             }
+        }
+
+        private void ckFragmentation_CheckedChanged(object sender, EventArgs e)
+        {
+            this.txtRuleFrge.Visible = this.ckFragmentation.Checked;
         }
     }
 }

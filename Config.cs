@@ -33,19 +33,56 @@ namespace Template
             DialogResult dr = MessageBox.Show("确认重置配置？", "重置配置", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
             if (dr == DialogResult.OK)
             {
-                System.IO.File.WriteAllText(path, "{\n    \"title\": \"Title\"\n}");
+                File.WriteAllText(path, "{\n    \"title\": \"Title\"\n}");
                 btnReload_Click(sender, e);
             }
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
+            SaveConfig();
+        }
+
+        /// <summary>
+        /// 载入配置文件
+        /// </summary>
+        void LoadConfig()
+        {
+            if (!File.Exists(path))
+            {
+                Console.WriteLine(1);
+                File.WriteAllText(path, "{\n    \"title\": \"Title\"\n}");
+            }
+            string[] lines = File.ReadAllLines(path, Encoding.UTF8);
+            for (int i=0;i<lines.Length - 1; i++)
+            {
+                lines[i] = lines[i].Replace(@"\", @"\\").Replace(@"\\\\", @"\\");
+            }
+            try
+            {
+                config = JsonConvert.DeserializeObject<Dictionary<string, string>>(string.Join("\n", lines));
+                SetUI();
+                SetJson();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("配置文件错误 请重置 详细信息：\n" + ex.ToString(), "错误：", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            SetStatus(2);
+        }
+
+        /// <summary>
+        /// 保存配置文件
+        /// </summary>
+        void SaveConfig()
+        {
             try
             {
                 string tmp = "{\n";
                 foreach (KeyValuePair<string, string> kvp in config)
                 {
-                    tmp += "\t\"" + kvp.Key + "\": \"" + kvp.Value + "\",\n";
+                    string t = kvp.Value.Replace(@"\", @"\\").Replace(@"\\\\", @"\\");
+                    tmp += "\t\"" + kvp.Key + "\": \"" + t + "\",\n";
                 }
                 tmp += "}";
                 File.WriteAllText(path, tmp);
@@ -57,37 +94,7 @@ namespace Template
             }
         }
 
-        /// <summary>
-        /// 载入配置文件
-        /// </summary>
-        void LoadConfig()
-        {
-            if (!File.Exists(path))
-            {
-                File.WriteAllText(path, "{\n    \"title\": \"Title\"\n}");
-            }
-            string[] lines = File.ReadAllLines(path, Encoding.UTF8);
-            for (int i=0;i<lines.Length - 1; i++)
-            {
-                lines[i] = lines[i].Replace("\\", "\\\\");
-            }
-            try
-            {
-                config = JsonConvert.DeserializeObject<Dictionary<string, string>>(string.Join("\n", lines));
-                this.txtTitle.Text = config.ContainsKey("title") ? config["title"] : "";
-                this.txtInput.Text = config.ContainsKey("input") ? config["input"] : "";
-                this.txtOutput.Text = config.ContainsKey("output") ? config["output"] : "";
-                this.txtErrorlog.Text = config.ContainsKey("error") ? config["error"] : "";
-
-                //SetJson("title", this.txtTitle.Text);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("配置文件错误 请重置 详细信息：\n" + ex.ToString(), "错误：", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            SetStatus(2);
-        }
-
+        #region Menu
         private void menuSave_Click(object sender, EventArgs e)
         {
             btnSave_Click(sender, e);
@@ -102,7 +109,9 @@ namespace Template
         {
             btnReset_Click(sender, e);
         }
+        #endregion
 
+        #region Set Data
         void SetStatus(int type)
         {
             if(type == 1)
@@ -117,6 +126,38 @@ namespace Template
             }
         }
 
+        void SetUI()
+        {
+            this.txtTitle.Text = config.ContainsKey("title") ? config["title"] : "";
+            this.txtInput.Text = config.ContainsKey("input") ? config["input"] : "";
+            this.txtOutput.Text = config.ContainsKey("output") ? config["output"] : "";
+            this.txtErrorlog.Text = config.ContainsKey("error") ? config["error"] : "";
+            this.txtTemplate.Text = config.ContainsKey("template") ? config["template"] : "";
+        }
+
+        void SetJson(string k = "", string v = "")
+        {
+            if (!k.Equals(""))
+            {
+                if (config.ContainsKey(k))
+                {
+                    config[k] = v;
+                }
+                else
+                {
+                    config.Add(k, v);
+                }
+            }
+            string tmp = "{\n";
+            foreach (KeyValuePair<string, string> kvp in config)
+            {
+                tmp += "\t\"" + kvp.Key + "\": \"" + kvp.Value + "\",\n";
+            }
+            tmp += "}";
+            this.rtxtConfig.Text = tmp;
+        }
+        #endregion
+
         #region Change JSON
         private void rtxtConfig_TextChanged(object sender, EventArgs e)
         {
@@ -127,14 +168,6 @@ namespace Template
                 SetUI();
             }
             catch (Exception ex) { }
-        }
-
-        void SetUI()
-        {
-            this.txtTitle.Text = config.ContainsKey("title") ? config["title"] : "";
-            this.txtInput.Text = config.ContainsKey("input") ? config["input"] : "";
-            this.txtOutput.Text = config.ContainsKey("output") ? config["output"] : "";
-            this.txtErrorlog.Text = config.ContainsKey("error") ? config["error"] : "";
         }
         #endregion
 
@@ -163,23 +196,10 @@ namespace Template
             SetJson("error", this.txtErrorlog.Text);
         }
 
-        void SetJson(string k, string v)
+        private void txtTemplate_TextChanged(object sender, EventArgs e)
         {
-            if (config.ContainsKey(k))
-            {
-                config[k] = v;
-            }
-            else
-            {
-                config.Add(k, v);
-            }
-            string tmp = "{\n";
-            foreach (KeyValuePair<string, string> kvp in config)
-            {
-                tmp += "\t\"" + kvp.Key + "\": \"" + kvp.Value + "\",\n";
-            }
-            tmp += "}";
-            this.rtxtConfig.Text = tmp;
+            SetStatus(1);
+            SetJson("template", this.txtTemplate.Text);
         }
         #endregion
     }
