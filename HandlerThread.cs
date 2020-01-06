@@ -82,25 +82,28 @@ namespace Template
             else if (template[0] == "O")
             {
                 string result = line[Convert.ToInt32(template[1])];
-                string[] opera = template[2].Split(',');
-                for (int i = 0; i < opera.Length; i++)
+                if(template.Length > 2)
                 {
-                    switch (opera[i].Split(':')[0])
+                    string[] opera = template[2].Split(',');
+                    for (int i = 0; i < opera.Length; i++)
                     {
-                        case "A":
-                            result = (Convert.ToDouble(result) + Convert.ToDouble(opera[i].Split(':')[1])).ToString();
-                            break;
-                        case "S":
-                            result = (Convert.ToDouble(result) - Convert.ToDouble(opera[i].Split(':')[1])).ToString();
-                            break;
-                        case "M":
-                            result = (Convert.ToDouble(result) * Convert.ToDouble(opera[i].Split(':')[1])).ToString();
-                            break;
-                        case "D":
-                            result = (Convert.ToDouble(result) / Convert.ToDouble(opera[i].Split(':')[1])).ToString();
-                            break;
-                        default:
-                            return "Error";
+                        switch (opera[i].Split(':')[0])
+                        {
+                            case "A":
+                                result = (Convert.ToDouble(result) + Convert.ToDouble(opera[i].Split(':')[1])).ToString();
+                                break;
+                            case "S":
+                                result = (Convert.ToDouble(result) - Convert.ToDouble(opera[i].Split(':')[1])).ToString();
+                                break;
+                            case "M":
+                                result = (Convert.ToDouble(result) * Convert.ToDouble(opera[i].Split(':')[1])).ToString();
+                                break;
+                            case "D":
+                                result = (Convert.ToDouble(result) / Convert.ToDouble(opera[i].Split(':')[1])).ToString();
+                                break;
+                            default:
+                                return "Error";
+                        }
                     }
                 }
                 if (Convert.ToDouble(result) < 0)
@@ -113,10 +116,10 @@ namespace Template
             }
         }
 
+        // 文件读取器
+        ReadFile reader = new ReadFile();
         public void StartTask(Params p)
         {
-            // 文件读取器
-            ReadFile reader = new ReadFile();
 
             // 错误日志
             List<string> errotLog = new List<string>();
@@ -128,24 +131,6 @@ namespace Template
             info.success_count_lines = 0;
             info.error_count_lines = 0;
 
-            // 生成文件模板
-            List<string> TemplateList = reader.ReadFileLineAsStringList(p.template, 1);
-
-            string file_name = "";
-
-            // 使用模板条件
-            string[] condition = TemplateList[0].Split('|');
-            foreach (string con in condition)
-            {
-                if (con.Contains("NC"))
-                {
-                    file_name = con.Split(':')[1];
-                }
-            }
-
-            // 生成文件标题
-            string title = TemplateList[1];
-
             // 获取文件列表
             DirectoryInfo TheFolder = new DirectoryInfo(p.input);
             FileInfo[] fileList = TheFolder.GetFiles();
@@ -156,17 +141,22 @@ namespace Template
 
             try
             {
+                string title = "";
                 for (int fileIndex = 0; fileIndex < fileList.Length; fileIndex++)
                 {
-                    if (file_name == "" || fileList[fileIndex].Name.Contains(file_name))
+                    // 生成文件模板
+                    List<string> TemplateList = GetTemplate(fileList[fileIndex].Name, p.template);
+                    if (TemplateList != null)
                     {
+                        title = TemplateList[1];
+                        Console.WriteLine(TemplateList[0]);
+                        string[] condition = TemplateList[0].Split('|');
                         List<string> fileLines = reader.ReadFileLineAsStringList(fileList[fileIndex].FullName, 3);
                         for (int lineIndex = 0; lineIndex < fileLines.Count; lineIndex++)
                         {
                             try
                             {
                                 string name = GetAnalyticData(p.ruleFrag, fileLines[lineIndex].Split('\t'));
-                                Console.WriteLine(name);
                                 Regex regImg = new Regex(@"\$\{.*?\}", RegexOptions.IgnoreCase);
                                 MatchCollection matches;
                                 bool flag = true;
@@ -177,41 +167,53 @@ namespace Template
                                         flag = false;
                                     }
                                 }
-                                if (flag)
+                                for (int tempIndex=0;tempIndex< TemplateList.Count; tempIndex++)
                                 {
-                                    // 行模板
-                                    string template = TemplateList[2];
-                                    for (int tempIndex=0;tempIndex< TemplateList.Count; tempIndex++)
+                                    if (TemplateList[tempIndex].Contains("condition") && GetAnalyticData(TemplateList[tempIndex].Split(':')[1], fileLines[lineIndex].Split('\t')) == TemplateList[tempIndex].Split(':')[2])
                                     {
-                                        if(TemplateList[tempIndex].Split(':')[0] == "condition" && GetAnalyticData(TemplateList[tempIndex].Split(':')[1], fileLines[lineIndex].Split('\t')) == TemplateList[tempIndex].Split(':')[2])
+                                        // 行模板
+                                        string template = TemplateList[tempIndex + 1];
+
+                                        // 将数据插入模板
+                                        matches = regImg.Matches(template);
+                                        for (int count = 0; count < matches.Count; count++)
                                         {
-                                            template = TemplateList[tempIndex + 1];
+                                            template = regImg.Replace(template, GetAnalyticData(matches[count].Value, fileLines[lineIndex].Split('\t')), 1);
                                         }
-                                    }
 
-                                    // 将数据插入模板
-                                    matches = regImg.Matches(template);
-                                    for (int count = 0; count < matches.Count; count++)
-                                    {
-                                        template = regImg.Replace(template, GetAnalyticData(matches[count].Value, fileLines[lineIndex].Split('\t')), 1);
-                                    }
-
-                                    // 保存解析结果
-                                    if (p.fragmentation)
-                                    {
-                                        if (printDict.ContainsKey(name))
+                                        // 保存解析结果
+                                        if (p.fragmentation)
                                         {
-                                            printDict[name].Add(template);
+                                            if (printDict.ContainsKey(name))
+                                            {
+                                                printDict[name].Add(template);
+                                            }
+                                            else
+                                            {
+                                                printDict.Add(name, new List<string>());
+                                                printDict[name].Add(template);
+                                            }
                                         }
                                         else
                                         {
-                                            printDict.Add(name, new List<string>());
-                                            printDict[name].Add(template);
+                                            if (p.subcontract)
+                                            {
+                                                string n = GetAnalyticData(p.ruleSubcontract, fileLines[lineIndex].Split('\t'));
+                                                if (printDict.ContainsKey(n))
+                                                {
+                                                    printDict[n].Add(template);
+                                                }
+                                                else
+                                                {
+                                                    printDict.Add(n, new List<string>());
+                                                    printDict[n].Add(template);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                printList.Add(template);
+                                            }
                                         }
-                                    }
-                                    else
-                                    {
-                                        printList.Add(template);
                                     }
                                 }
 
@@ -227,12 +229,12 @@ namespace Template
                                 info.process = fileIndex * 100 / fileList.Length;
                                 info.error_count_lines++;
                                 StartHandler?.Invoke(info);
-                                MessageBox.Show(ex.ToString(), "错误：", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                //MessageBox.Show(ex.ToString(), "错误：", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
                         }
                     }
                 }
-                if (p.fragmentation)
+                if (p.fragmentation || p.subcontract)
                 {
                     foreach (KeyValuePair<string, List<string>> kvp in printDict)
                     {
@@ -249,7 +251,7 @@ namespace Template
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "错误：", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //MessageBox.Show(ex.ToString(), "错误：", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -270,6 +272,28 @@ namespace Template
             sr.WriteLine(content);
             sr.Close();
             fs.Close();
+        }
+
+        List<string> GetTemplate(string name, string tmpPath)
+        {
+            DirectoryInfo TheFolder = new DirectoryInfo(tmpPath);
+            FileInfo[] fileList = TheFolder.GetFiles();
+            foreach(FileInfo tmp in TheFolder.GetFiles())
+            {
+                if (tmp.Name.Contains("template"))
+                {
+                    List<string> TemplateList = reader.ReadFileLineAsStringList(tmp.FullName, 1);
+                    string[] condition = TemplateList[0].Split('|');
+                    foreach (string con in condition)
+                    {
+                        if (con.Contains("NC") && name.Contains(con.Split(':')[1]))
+                        {
+                            return TemplateList;
+                        }
+                    }
+                }
+            }
+            return reader.ReadFileLineAsStringList(tmpPath + "\\default_template.txt", 1);
         }
     }
 }

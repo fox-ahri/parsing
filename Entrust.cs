@@ -13,6 +13,8 @@
         public string template;
         public bool fragmentation;
         public string ruleFrag;
+        public bool subcontract;
+        public string ruleSubcontract;
     };
 
     struct WindowInfo

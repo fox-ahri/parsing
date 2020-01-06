@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Help</title>
+</head>
+<body>
+    <h1>Help</h1>
+    <h1>C# 解析工具说明：</h1>
+
+<h3>模板配置</h3>
+
+<p>|参数|说明|举例|
+|--|--|
+|1|2|</p>
+
+<p>|参数 | 说明 |
+| --- | --- |
+| V   | 取值 |
+| R   | 操作 |
+| O   | 运算 |</p>
+
+<p><code></code>`
+NC:invalid
+音频    是否有效    起止时间
+condition:${R<em>3</em>103}:有效
+${R<em>1</em>F}    ${R<em>3</em>103_有效:T,无效:N}    [${O_4}][${O_5}]</p>
+
+<p>NV:invalid # 导出文件名包含 invalid 的使用模板该文件</p>
+
+<p>音频    是否有效    起止时间 # 解析后生成文件的第一行</p>
+
+<p>condition:${R<em>3</em>103}:有效 # 当当前行的第三列的 103 属性等于 有效是使用下一行模板</p>
+
+<p>${R<em>1</em>F} # 获取导出文件的第1列的文件名 (F:文件名,E:扩展名,N:除了扩展名)</p>
+
+<p>${R<em>3</em>103_有效:T,无效:N} # 获取第3列的103，如果是有效则返回T，无效返回F</p>
+
+<p>[${O_4_D:1000,A:1}][${O_5D:1000}] # 获得第4和5列，并处以1000 (A:加,S:减,M:乘,D:除)</p>
+
+<h1>举例</h1>
+
+<p>643<em>14</em>997	/data/GuoFeifei/9150/juesefenli/39<em>dianxin</em>20190201<em>wh/sub/201811050000058306-p.wav	&lt;img src=&quot;tags/5/cb2f17fd478acf406620a9e4d0c47d8f.jpg&quot; tagid=&quot;18&quot; seq=&quot;1&quot;&gt;	{&quot;103&quot;:&quot;无效&quot;}	4232	5332	136850	136850
+643</em>14<em>998	/data/GuoFeifei/9150/juesefenli/39</em>dianxin<em>20190201</em>wh/sub/201811050000058306-p.wav	&lt;img src=&quot;tags/5/0fbec7d86da9fefa4fc5be38970e66d5.jpg&quot; tagid=&quot;4&quot; seq=&quot;1&quot;&gt;	{&quot;103&quot;:&quot;无效&quot;}	5332	6420	136850	136850</p>
+
+<h1>结果</h1>
+
+<p>音频    是否有效    起止时间
+201811050000058306-p.wav    F   [5.232][5.332]
+201811050000058306-p.wav    F   [6.332][6.420]
+<code></code>`</p>
+</body>
+</html>

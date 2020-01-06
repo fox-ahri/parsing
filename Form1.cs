@@ -16,45 +16,7 @@ namespace Template
         public Main()
         {
             InitializeComponent();
-            if (File.Exists(configPath))
-            {
-                try
-                {
-                    string[] lines = File.ReadAllLines(configPath);
-                    config = JsonConvert.DeserializeObject<Dictionary<string, string>>(string.Join("\n", lines));
-                    this.Text = config["title"];
-                    if (config.ContainsKey("input") && !config["input"].Equals(""))
-                        this.txtInput.Text = config["input"];
-                    else
-                        this.txtInput.Text = Directory.GetCurrentDirectory() + "\\input";
-                    if (config.ContainsKey("output") && !config["output"].Equals(""))
-                        this.txtOutput.Text = config["output"];
-                    else
-                        this.txtOutput.Text = Directory.GetCurrentDirectory() + "\\output";
-                    if (config.ContainsKey("error") && !config["error"].Equals(""))
-                    {
-                        if (Directory.Exists(Path.GetDirectoryName(config["error"])))
-                        {
-                            this.errorLogPath = config["error"];
-                        }
-                        else
-                        {
-                            MessageBox.Show("配置文件中错误日志的路径不存在，已设置为：\n" + errorLogPath, "错误：", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("配置文件错误，请矫正", "错误：", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    this.txtInput.Text = Directory.GetCurrentDirectory() + "\\input";
-                    this.txtOutput.Text = Directory.GetCurrentDirectory() + "\\output";
-                }
-            }
-            else
-            {
-                this.txtInput.Text = Directory.GetCurrentDirectory() + "\\input";
-                this.txtOutput.Text = Directory.GetCurrentDirectory() + "\\output";
-            }
+            ReloadConfig();
             Main.MyWindow = this;
         }
 
@@ -98,6 +60,8 @@ namespace Template
                 p.template = config["template"];
                 p.fragmentation = this.ckFragmentation.Checked;
                 p.ruleFrag = this.txtRuleFrge.Text;
+                p.subcontract = this.ckRuleSubcontract.Checked;
+                p.ruleSubcontract = this.txtSubcontract.Text;
                 myThread = new Thread(() => HT.StartTask(p));
                 myThread.IsBackground = true;
                 myThread.Start();
@@ -210,6 +174,73 @@ namespace Template
         private void ckFragmentation_CheckedChanged(object sender, EventArgs e)
         {
             this.txtRuleFrge.Visible = this.ckFragmentation.Checked;
+        }
+
+        private void ckRuleSubcontract_CheckedChanged(object sender, EventArgs e)
+        {
+            this.txtSubcontract.Visible = this.ckRuleSubcontract.Checked;
+        }
+
+        private void btnReloadConfig_Click(object sender, EventArgs e)
+        {
+            if (File.Exists(configPath))
+            {
+                ReloadConfig();
+                MessageBox.Show("配置载入成功", "提示：", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("配置文件不存在", "错误：", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        void ReloadConfig()
+        {
+            if (File.Exists(configPath))
+            {
+                try
+                {
+                    string[] lines = File.ReadAllLines(configPath);
+                    config = JsonConvert.DeserializeObject<Dictionary<string, string>>(string.Join("\n", lines));
+                    this.Text = config["title"];
+                    if (config.ContainsKey("input") && !config["input"].Equals(""))
+                        this.txtInput.Text = config["input"];
+                    else
+                        this.txtInput.Text = Directory.GetCurrentDirectory() + "\\input";
+                    if (config.ContainsKey("output") && !config["output"].Equals(""))
+                        this.txtOutput.Text = config["output"];
+                    else
+                        this.txtOutput.Text = Directory.GetCurrentDirectory() + "\\output";
+                    if (config.ContainsKey("error") && !config["error"].Equals(""))
+                    {
+                        if (Directory.Exists(Path.GetDirectoryName(config["error"])))
+                        {
+                            this.errorLogPath = config["error"];
+                        }
+                        else
+                        {
+                            MessageBox.Show("配置文件中错误日志的路径不存在，已设置为：\n" + errorLogPath, "错误：", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("配置文件错误，请矫正", "错误：", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    this.txtInput.Text = Directory.GetCurrentDirectory() + "\\input";
+                    this.txtOutput.Text = Directory.GetCurrentDirectory() + "\\output";
+                }
+            }
+            else
+            {
+                this.txtInput.Text = Directory.GetCurrentDirectory() + "\\input";
+                this.txtOutput.Text = Directory.GetCurrentDirectory() + "\\output";
+            }
+        }
+
+        private void menuHelp_Click(object sender, EventArgs e)
+        {
+            Help help = new Help();
+            help.Show();
         }
     }
 }

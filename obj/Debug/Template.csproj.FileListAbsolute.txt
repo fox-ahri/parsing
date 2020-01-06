@@ -11,3 +11,4 @@ C:\Users\ahrik\Desktop\Template\bin\Debug\Newtonsoft.Json.dll
 C:\Users\ahrik\Desktop\Template\bin\Debug\Newtonsoft.Json.xml
 C:\Users\ahrik\Desktop\Template\obj\Debug\Template.csproj.CopyComplete
 C:\Users\ahrik\Desktop\Template\obj\Debug\Template.Config.resources
+C:\Users\ahrik\Desktop\Template\obj\Debug\Template.Help.resources

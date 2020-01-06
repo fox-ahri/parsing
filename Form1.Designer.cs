@@ -49,6 +49,10 @@
             this.lbErrorLinesCount = new System.Windows.Forms.Label();
             this.ckFragmentation = new System.Windows.Forms.CheckBox();
             this.txtRuleFrge = new System.Windows.Forms.TextBox();
+            this.txtSubcontract = new System.Windows.Forms.TextBox();
+            this.ckRuleSubcontract = new System.Windows.Forms.CheckBox();
+            this.btnReloadConfig = new System.Windows.Forms.Button();
+            this.menuHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.menu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -94,9 +98,9 @@
             // btnStart
             // 
             this.btnStart.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnStart.Location = new System.Drawing.Point(666, 218);
+            this.btnStart.Location = new System.Drawing.Point(666, 216);
             this.btnStart.Name = "btnStart";
-            this.btnStart.Size = new System.Drawing.Size(122, 42);
+            this.btnStart.Size = new System.Drawing.Size(122, 44);
             this.btnStart.TabIndex = 4;
             this.btnStart.Text = "开始";
             this.btnStart.UseVisualStyleBackColor = true;
@@ -105,7 +109,7 @@
             // progressBar
             // 
             this.progressBar.Cursor = System.Windows.Forms.Cursors.Default;
-            this.progressBar.Location = new System.Drawing.Point(12, 332);
+            this.progressBar.Location = new System.Drawing.Point(12, 349);
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(776, 23);
             this.progressBar.TabIndex = 5;
@@ -114,7 +118,7 @@
             // 
             this.lbStatus.AutoSize = true;
             this.lbStatus.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbStatus.Location = new System.Drawing.Point(9, 313);
+            this.lbStatus.Location = new System.Drawing.Point(9, 330);
             this.lbStatus.Name = "lbStatus";
             this.lbStatus.Size = new System.Drawing.Size(72, 16);
             this.lbStatus.TabIndex = 6;
@@ -125,7 +129,7 @@
             this.btnStop.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnStop.Location = new System.Drawing.Point(666, 266);
             this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(122, 42);
+            this.btnStop.Size = new System.Drawing.Size(122, 44);
             this.btnStop.TabIndex = 7;
             this.btnStop.Text = "停止";
             this.btnStop.UseVisualStyleBackColor = true;
@@ -136,7 +140,8 @@
             // 
             this.menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.打开ToolStripMenuItem,
-            this.设置ToolStripMenuItem});
+            this.设置ToolStripMenuItem,
+            this.menuHelp});
             this.menu.Location = new System.Drawing.Point(0, 0);
             this.menu.Name = "menu";
             this.menu.Size = new System.Drawing.Size(800, 25);
@@ -190,7 +195,7 @@
             // 
             this.menuConfig.Name = "menuConfig";
             this.menuConfig.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-            this.menuConfig.Size = new System.Drawing.Size(168, 22);
+            this.menuConfig.Size = new System.Drawing.Size(180, 22);
             this.menuConfig.Text = "配置文件";
             this.menuConfig.Click += new System.EventHandler(this.menuConfig_Click);
             // 
@@ -210,7 +215,7 @@
             this.lbSuccessLinesCount.AutoSize = true;
             this.lbSuccessLinesCount.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbSuccessLinesCount.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.lbSuccessLinesCount.Location = new System.Drawing.Point(12, 374);
+            this.lbSuccessLinesCount.Location = new System.Drawing.Point(12, 391);
             this.lbSuccessLinesCount.Name = "lbSuccessLinesCount";
             this.lbSuccessLinesCount.Size = new System.Drawing.Size(135, 14);
             this.lbSuccessLinesCount.TabIndex = 10;
@@ -221,7 +226,7 @@
             this.lbErrorLinesCount.AutoSize = true;
             this.lbErrorLinesCount.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbErrorLinesCount.ForeColor = System.Drawing.Color.Red;
-            this.lbErrorLinesCount.Location = new System.Drawing.Point(12, 400);
+            this.lbErrorLinesCount.Location = new System.Drawing.Point(12, 417);
             this.lbErrorLinesCount.Name = "lbErrorLinesCount";
             this.lbErrorLinesCount.Size = new System.Drawing.Size(135, 14);
             this.lbErrorLinesCount.TabIndex = 11;
@@ -231,29 +236,74 @@
             // 
             this.ckFragmentation.AutoSize = true;
             this.ckFragmentation.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ckFragmentation.Location = new System.Drawing.Point(12, 218);
+            this.ckFragmentation.Location = new System.Drawing.Point(12, 268);
             this.ckFragmentation.Name = "ckFragmentation";
             this.ckFragmentation.Size = new System.Drawing.Size(59, 20);
             this.ckFragmentation.TabIndex = 12;
-            this.ckFragmentation.Text = "分包";
+            this.ckFragmentation.Text = "分片";
             this.ckFragmentation.UseVisualStyleBackColor = true;
             this.ckFragmentation.CheckedChanged += new System.EventHandler(this.ckFragmentation_CheckedChanged);
             // 
             // txtRuleFrge
             // 
             this.txtRuleFrge.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.txtRuleFrge.Location = new System.Drawing.Point(76, 216);
+            this.txtRuleFrge.Location = new System.Drawing.Point(76, 266);
             this.txtRuleFrge.Name = "txtRuleFrge";
             this.txtRuleFrge.Size = new System.Drawing.Size(584, 26);
             this.txtRuleFrge.TabIndex = 13;
             this.txtRuleFrge.Text = "${R_1_N}";
             this.txtRuleFrge.Visible = false;
             // 
+            // txtSubcontract
+            // 
+            this.txtSubcontract.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txtSubcontract.Location = new System.Drawing.Point(76, 216);
+            this.txtSubcontract.Name = "txtSubcontract";
+            this.txtSubcontract.Size = new System.Drawing.Size(584, 26);
+            this.txtSubcontract.TabIndex = 15;
+            this.txtSubcontract.Text = "${R_3_103_有效:result.txt,无效:invalid-result.txt}";
+            // 
+            // ckRuleSubcontract
+            // 
+            this.ckRuleSubcontract.AutoSize = true;
+            this.ckRuleSubcontract.Checked = true;
+            this.ckRuleSubcontract.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ckRuleSubcontract.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ckRuleSubcontract.Location = new System.Drawing.Point(12, 218);
+            this.ckRuleSubcontract.Name = "ckRuleSubcontract";
+            this.ckRuleSubcontract.Size = new System.Drawing.Size(59, 20);
+            this.ckRuleSubcontract.TabIndex = 14;
+            this.ckRuleSubcontract.Text = "分包";
+            this.ckRuleSubcontract.UseVisualStyleBackColor = true;
+            this.ckRuleSubcontract.CheckedChanged += new System.EventHandler(this.ckRuleSubcontract_CheckedChanged);
+            // 
+            // btnReloadConfig
+            // 
+            this.btnReloadConfig.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnReloadConfig.Location = new System.Drawing.Point(666, 28);
+            this.btnReloadConfig.Name = "btnReloadConfig";
+            this.btnReloadConfig.Size = new System.Drawing.Size(122, 27);
+            this.btnReloadConfig.TabIndex = 16;
+            this.btnReloadConfig.Text = "重新载入配置";
+            this.btnReloadConfig.UseVisualStyleBackColor = true;
+            this.btnReloadConfig.Click += new System.EventHandler(this.btnReloadConfig_Click);
+            // 
+            // menuHelp
+            // 
+            this.menuHelp.Name = "menuHelp";
+            this.menuHelp.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.H)));
+            this.menuHelp.Size = new System.Drawing.Size(44, 21);
+            this.menuHelp.Text = "帮助";
+            this.menuHelp.Click += new System.EventHandler(this.menuHelp_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnReloadConfig);
+            this.Controls.Add(this.txtSubcontract);
+            this.Controls.Add(this.ckRuleSubcontract);
             this.Controls.Add(this.txtRuleFrge);
             this.Controls.Add(this.ckFragmentation);
             this.Controls.Add(this.lbErrorLinesCount);
@@ -302,6 +352,10 @@
         private System.Windows.Forms.Label lbErrorLinesCount;
         private System.Windows.Forms.CheckBox ckFragmentation;
         private System.Windows.Forms.TextBox txtRuleFrge;
+        private System.Windows.Forms.TextBox txtSubcontract;
+        private System.Windows.Forms.CheckBox ckRuleSubcontract;
+        private System.Windows.Forms.Button btnReloadConfig;
+        private System.Windows.Forms.ToolStripMenuItem menuHelp;
     }
 }
 
